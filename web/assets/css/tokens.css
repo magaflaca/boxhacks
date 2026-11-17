@@ -29,8 +29,14 @@
 
   --cloud: #fffdf9;
   --cloud-edge: #efe2d2;
-  --star: transparent;
-  --star-core: transparent;
+  --sun: #fdeeb0;
+  --sun-ray: #f6dc8c;
+  --hill-far: #e6f3e3;
+  --hill-near: #d3edd9;
+
+  --cursor-edge: #564f6b;
+  --cursor-fill: #8fdcab;
+  --cursor-light: #d8f7e0;
 
   --bug-outline: #2f7556;
   --bug-body: #7fd49e;
@@ -67,10 +73,17 @@
   --tint-lilac: #453c70;
   --tint-peach: #5b4136;
 
-  --cloud: transparent;
-  --cloud-edge: transparent;
+  --cloud: #222037;
+  --cloud-edge: #2b2846;
   --star: #6f6a9c;
   --star-core: #f6ecc0;
+  --moon: #f3e9bd;
+  --hill-far: #1f2236;
+  --hill-near: #223039;
+
+  --cursor-edge: #f3effc;
+  --cursor-fill: #6fc795;
+  --cursor-light: #b9efc9;
 
   --bug-outline: #1f5a44;
   --bug-body: #86dba8;
