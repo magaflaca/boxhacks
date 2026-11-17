@@ -1,0 +1,21 @@
+[Unit]
+Description=boxhacks (alojamiento temporal de archivos)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=boxhacks
+Group=boxhacks
+WorkingDirectory=/opt/boxhacks/app
+EnvironmentFile=/opt/boxhacks/env
+ExecStart=/opt/boxhacks/runtime/bin/node src/server.js
+Restart=always
+RestartSec=2
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/boxhacks/data
+
+[Install]
+WantedBy=multi-user.target
