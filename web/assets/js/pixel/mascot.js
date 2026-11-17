@@ -72,6 +72,7 @@ export const mascotIcon = () => pixelDataUrl(BODY, PALETTE, 2);
 
 export function createMascot(host, { scale = 4, roam = () => 0 } = {}) {
   const svg = pixelSvg(BODY, PALETTE, { scale });
+  svg.classList.add('mascot-body');
   host.append(svg);
 
   let mood = 'idle';

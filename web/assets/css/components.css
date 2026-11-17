@@ -132,20 +132,20 @@
   to { transform: translate(calc(-50% + var(--drift, 0px)), -46px); opacity: 0; }
 }
 
-.mascot .pixel {
+.mascot-body {
   animation: bob 1.7s steps(2) infinite;
 }
 
-.mascot[data-mood="hungry"] .pixel,
-.mascot[data-mood="happy"] .pixel {
+.mascot[data-mood="hungry"] .mascot-body,
+.mascot[data-mood="happy"] .mascot-body {
   animation: hop 0.44s steps(3) infinite;
 }
 
-.mascot[data-mood="eating"] .pixel {
+.mascot[data-mood="eating"] .mascot-body {
   animation: bob 0.4s steps(2) infinite;
 }
 
-.mascot[data-mood="sad"] .pixel {
+.mascot[data-mood="sad"] .mascot-body {
   animation: none;
 }
 
@@ -159,7 +159,7 @@
   50% { transform: translateY(-10px); }
 }
 
-.mascot .pixel {
+.mascot-body {
   transform-origin: 50% 100%;
 }
 
