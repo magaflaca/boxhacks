@@ -4,6 +4,7 @@ import { pixelText, pixelWord } from '../pixel/font.js';
 import { mascotIcon } from '../pixel/mascot.js';
 import { mountSparkles } from '../pixel/particles.js';
 import { mountScene } from '../pixel/scene.js';
+import { mountSound } from './sound.js';
 import { THEME_EVENT, mountTheme } from './theme.js';
 
 function setFavicon() {
@@ -16,6 +17,7 @@ export function mountChrome() {
     heading.append(pixelText(heading.dataset.pixel, { scale: 2 }));
   }
   mountTheme($('#theme-toggle'));
+  mountSound($('#sound-toggle'), $('#mascot'));
   mountScene($('#sky'), $('#ground'));
   mountSparkles();
   setFavicon();

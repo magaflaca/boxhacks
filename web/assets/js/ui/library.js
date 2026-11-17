@@ -1,6 +1,7 @@
 import { api } from '../lib/api.js';
 import { el } from '../lib/dom.js';
 import { bareUrl, bytes, timeLeft } from '../lib/format.js';
+import { play } from '../lib/sound.js';
 import { icon } from '../pixel/icons.js';
 import { copyButton, copyText, fileRow, flashCopied, iconButton } from './row.js';
 
@@ -28,6 +29,7 @@ export function mountLibrary({ section, list, copyAll, more }) {
         return;
       }
       clearTimeout(armed);
+      play('remove');
       await api.remove(file.slug).catch(() => {});
       refresh();
     });

@@ -17,6 +17,11 @@
   justify-content: space-between;
 }
 
+.masthead-actions {
+  display: flex;
+  gap: 6px;
+}
+
 .logo {
   display: block;
 }

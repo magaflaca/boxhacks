@@ -1,6 +1,7 @@
 import { api } from './lib/api.js';
 import { $ } from './lib/dom.js';
 import { bareUrl } from './lib/format.js';
+import { play } from './lib/sound.js';
 import { icon } from './pixel/icons.js';
 import { createMascot } from './pixel/mascot.js';
 import { mountChrome } from './ui/chrome.js';
@@ -42,6 +43,7 @@ const uploader = mountUploader($('#queue'), {
   },
   async onDone(stored) {
     mascot.setMood(stored ? 'happy' : 'sad');
+    play(stored ? 'done' : 'error');
     if (!stored) return;
     await library.refresh(stored.slug);
     if (!busy) copyText(stored.url);
@@ -51,6 +53,7 @@ const uploader = mountUploader($('#queue'), {
 mountDropzone({ zone, input: $('#file-input') }, {
   onHover: (active) => mascot.setMood(active ? 'hungry' : busy ? 'eating' : 'idle'),
   onFiles(files) {
+    play('drop');
     uploader.enqueue(files, options.read());
     options.clearSlug();
   },
