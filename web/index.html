@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>boxhacks</title>
+  <meta name="description" content="Sube un archivo y comparte un enlace directo. Se borra solo a los tres días.">
+  <script src="/assets/js/theme-boot.js"></script>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/scene.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/main.js"></script>
+</head>
+<body>
+  <div class="sky" id="sky" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="masthead">
+      <h1 class="logo" id="logo"></h1>
+      <button class="icon-button" id="theme-toggle" type="button"></button>
+    </header>
+    <p class="tagline">Sube un archivo, comparte el enlace. Se borra solo.</p>
+
+    <button class="box dropzone" id="dropzone" type="button">
+      <span class="mascot" id="mascot" aria-hidden="true"></span>
+      <span class="dropzone-icon" id="dropzone-icon"></span>
+      <span class="dropzone-title">Suelta tus archivos aquí</span>
+      <span class="dropzone-hint">o haz clic para elegirlos. También puedes pegar con Ctrl+V.</span>
+    </button>
+    <input type="file" id="file-input" multiple hidden>
+
+    <form class="options" onsubmit="return false">
+      <label class="field field-grow">
+        <span class="field-label">enlace</span>
+        <span class="box slug-box">
+          <span class="slug-prefix" id="slug-prefix"></span>
+          <input id="slug" name="slug" placeholder="automático" maxlength="48" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </span>
+        <span class="slug-status" id="slug-status" aria-live="polite"></span>
+      </label>
+      <div class="field">
+        <span class="field-label" id="expiry-label">caduca en</span>
+        <div class="segmented" id="expiry" role="radiogroup" aria-labelledby="expiry-label"></div>
+      </div>
+    </form>
+
+    <ul class="rows" id="queue" aria-live="polite"></ul>
+
+    <section class="section" id="library" hidden>
+      <h2 class="section-title" data-pixel="tus archivos"></h2>
+      <ul class="rows" id="library-list"></ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title" data-pixel="desde la terminal"></h2>
+      <ul class="snippets" id="snippets"></ul>
+      <p class="note">
+        Cada subida devuelve un token en la cabecera <code>X-Box-Token</code>. Envíalo como
+        <code>Authorization: Bearer</code> para listar tus archivos en <code>/api/files</code> o borrarlos con <code>DELETE</code>.
+      </p>
+    </section>
+
+    <footer class="footer">Los archivos se cifran antes de guardarse y caducan solos.</footer>
+  </main>
+
+  <div class="ground" id="ground" aria-hidden="true"></div>
+</body>
+</html>
