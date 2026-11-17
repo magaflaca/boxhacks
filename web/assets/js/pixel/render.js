@@ -44,3 +44,12 @@ export function pixelSvg(rows, palette, { scale = 4, label } = {}) {
 export function patchRows(rows, patches) {
   return rows.map((row, index) => patches[index] ?? row);
 }
+
+export function pixelDataUrl(rows, palette, scale) {
+  const styles = getComputedStyle(document.documentElement);
+  const resolve = (color) => color.replace(/var\((--[\w-]+)\)/g, (_, name) => styles.getPropertyValue(name).trim());
+  const colors = Object.fromEntries(Object.entries(palette).map(([cell, color]) => [cell, resolve(color)]));
+  const svg = pixelSvg(rows, colors, { scale });
+  svg.setAttribute('xmlns', SVG_NS);
+  return `data:image/svg+xml,${encodeURIComponent(svg.outerHTML)}`;
+}

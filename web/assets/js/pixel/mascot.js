@@ -1,4 +1,5 @@
-import { patchRows, pixelPaths, pixelSvg } from './render.js';
+import { floatUp } from './particles.js';
+import { patchRows, pixelDataUrl, pixelPaths, pixelSvg } from './render.js';
 
 const PALETTE = {
   o: 'var(--bug-outline)',
@@ -52,18 +53,22 @@ const MOODS = {
   eating: { frames: [frame('open'), frame(), frame('open', 'step'), frame('wiggle')], every: 200 },
   happy: { frames: [frame('smile'), frame('smile', 'wiggle', 'step')], every: 220, lasts: 2600 },
   sad: { frames: [frame('frown', 'droop')], every: 600, lasts: 3200 },
+  asleep: { frames: [frame('blink')], every: 900 },
 };
 
 const BLINK_MS = 140;
 const STEP_PX = 4;
 const STEP_MS = 150;
 const REST_MS = [5000, 12000];
+const SLEEP_AFTER_MS = 45_000;
+const FOLLOW_REACH_PX = 170;
 const GAZE = { '-1': 'lookLeft', 1: 'lookRight' };
 const STRIDE = [frame('step'), frame()];
 
 const between = ([min, max]) => min + Math.random() * (max - min);
+const snap = (value) => Math.round(value / STEP_PX) * STEP_PX;
 
-export const mascotFace = () => pixelSvg(BODY, PALETTE, { scale: 2 });
+export const mascotIcon = () => pixelDataUrl(BODY, PALETTE, 2);
 
 export function createMascot(host, { scale = 4, roam = () => 0 } = {}) {
   const svg = pixelSvg(BODY, PALETTE, { scale });
@@ -76,9 +81,14 @@ export function createMascot(host, { scale = 4, roam = () => 0 } = {}) {
   let position = 0;
   let target = 0;
   let restUntil = performance.now() + between(REST_MS);
+  let lastStir = performance.now();
   let revert;
 
   const walking = () => mood === 'idle' && position !== target;
+
+  function rest() {
+    restUntil = performance.now() + between(REST_MS);
+  }
 
   function currentRows() {
     if (walking()) return patchRows(STRIDE[tick % 2], PARTS[GAZE[Math.sign(position - target)]]);
@@ -92,22 +102,27 @@ export function createMascot(host, { scale = 4, roam = () => 0 } = {}) {
   const draw = () => svg.replaceChildren(...pixelPaths(currentRows(), PALETTE));
 
   function stroll() {
-    if (mood !== 'idle') return;
     if (position === target) {
       if (performance.now() < restUntil) return;
-      target = Math.round((Math.random() * roam()) / STEP_PX) * STEP_PX;
-      restUntil = Infinity;
+      target = snap(Math.random() * Math.max(roam(), 0));
+      if (position === target) return rest();
     }
-    if (position === target) return void (restUntil = performance.now() + between(REST_MS));
     position += Math.sign(target - position) * STEP_PX;
     host.style.transform = `translateX(${-position}px)`;
-    if (position === target) restUntil = performance.now() + between(REST_MS);
+    if (position === target) rest();
+  }
+
+  function live() {
+    if (mood === 'asleep' && tick % 3 === 0) floatUp(host, 'zed');
+    if (mood !== 'idle') return;
+    stroll();
+    if (Math.random() < 0.12) blinkUntil = performance.now() + BLINK_MS;
+    if (!walking() && performance.now() - lastStir > SLEEP_AFTER_MS) setMood('asleep');
   }
 
   function loop() {
     tick++;
-    stroll();
-    if (mood === 'idle' && Math.random() < 0.12) blinkUntil = performance.now() + BLINK_MS;
+    live();
     draw();
     setTimeout(loop, walking() ? STEP_MS : MOODS[mood].every);
   }
@@ -116,19 +131,40 @@ export function createMascot(host, { scale = 4, roam = () => 0 } = {}) {
     if (next === mood) return;
     mood = next;
     host.dataset.mood = next;
+    lastStir = performance.now();
     clearTimeout(revert);
     if (MOODS[next].lasts) revert = setTimeout(() => setMood('idle'), MOODS[next].lasts);
     draw();
   }
 
-  window.addEventListener('pointermove', (event) => {
+  function cheer() {
+    if (mood === 'idle' || mood === 'asleep') setMood('happy');
+  }
+
+  function follow(event) {
     const box = host.getBoundingClientRect();
     const offset = event.clientX - (box.left + box.width / 2);
     gaze = Math.abs(offset) < box.width ? 0 : Math.sign(offset);
+    const near = Math.abs(event.clientY - box.bottom) < FOLLOW_REACH_PX;
+    if (mood !== 'idle' || !near || Math.abs(offset) < box.width / 2) return;
+    target = Math.min(Math.max(snap(position - offset), 0), snap(Math.max(roam(), 0)));
+  }
+
+  window.addEventListener('pointermove', (event) => {
+    if (mood === 'asleep') setMood('happy');
+    lastStir = performance.now();
+    follow(event);
   }, { passive: true });
+
+  host.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    floatUp(host, 'heart');
+    cheer();
+  });
 
   host.dataset.mood = mood;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) draw();
   else loop();
-  return { setMood };
+  return { setMood, cheer };
 }

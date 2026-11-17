@@ -1,5 +1,7 @@
 import { icon } from '../pixel/icons.js';
 
+export const THEME_EVENT = 'box:theme';
+
 const NEXT = { light: 'dark', dark: 'light' };
 const ICON = { light: 'moon', dark: 'sun' };
 const LABEL = { light: 'Cambiar a modo oscuro', dark: 'Cambiar a modo claro' };
@@ -19,6 +21,7 @@ export function mountTheme(button) {
       localStorage.setItem('box-theme', root.dataset.theme);
     } catch {}
     render();
+    document.dispatchEvent(new Event(THEME_EVENT));
   });
   render();
 }

@@ -117,7 +117,19 @@
   position: absolute;
   right: 36px;
   bottom: calc(100% + var(--u));
-  pointer-events: none;
+  cursor: var(--cursor-pointer, pointer);
+}
+
+.mascot .particle {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  animation: rise 1.2s steps(8) forwards;
+}
+
+@keyframes rise {
+  from { transform: translate(-50%, 0); opacity: 1; }
+  to { transform: translate(calc(-50% + var(--drift, 0px)), -46px); opacity: 0; }
 }
 
 .mascot .pixel {
@@ -154,7 +166,7 @@
 .options {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px 28px;
+  gap: 18px 20px;
   margin-top: 30px;
 }
 
@@ -166,7 +178,7 @@
 }
 
 .field-grow {
-  flex: 1 1 200px;
+  flex: 1 1 236px;
 }
 
 .field-label {
@@ -237,10 +249,9 @@
   --edge: var(--line);
   display: block;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 10px;
   line-height: 36px;
   white-space: nowrap;
-  cursor: pointer;
   background: var(--surface);
   box-shadow:
     0 calc(var(--u) * -1) 0 0 var(--edge),

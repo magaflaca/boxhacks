@@ -7,7 +7,7 @@ import { mountChrome } from './ui/chrome.js';
 import { mountDropzone } from './ui/dropzone.js';
 import { mountLibrary } from './ui/library.js';
 import { mountOptions } from './ui/options.js';
-import { copyText } from './ui/row.js';
+import { COPIED_EVENT, copyText } from './ui/row.js';
 import { mountTerminal } from './ui/terminal.js';
 import { mountUploader } from './ui/uploader.js';
 
@@ -15,6 +15,7 @@ mountChrome();
 
 const zone = $('#dropzone');
 const mascot = createMascot($('#mascot'), { roam: () => zone.clientWidth - 140 });
+document.addEventListener(COPIED_EVENT, mascot.cheer);
 $('#dropzone-icon').append(icon('upload', { scale: 4 }));
 
 const settings = await api.config();

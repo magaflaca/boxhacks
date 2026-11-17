@@ -5,6 +5,7 @@
 }
 
 html {
+  cursor: var(--cursor-default, auto);
   background: var(--bg);
   transition: background-color 0.3s steps(4);
 }
@@ -49,8 +50,17 @@ input {
   color: inherit;
 }
 
+a,
+button,
+label {
+  cursor: var(--cursor-pointer, pointer);
+}
+
+input {
+  cursor: var(--cursor-text, text);
+}
+
 button {
-  cursor: pointer;
   border: 0;
   background: none;
   padding: 0;
@@ -86,7 +96,7 @@ code {
   width: 100%;
   max-width: var(--page);
   margin: 0 auto;
-  padding: 40px 20px 96px;
+  padding: 40px 20px 190px;
 }
 
 .page-centered {

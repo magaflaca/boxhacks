@@ -3,6 +3,8 @@ import { fileKind, icon } from '../pixel/icons.js';
 
 const COPIED_MS = 1400;
 
+export const COPIED_EVENT = 'box:copied';
+
 export function fileRow({ mime, title, meta, actions = [] }) {
   const metaLine = el('span', { class: 'row-meta' }, meta);
   const node = el('li', { class: 'row' },
@@ -34,6 +36,7 @@ export function copyButton(text) {
 }
 
 export function flashCopied(button) {
+  document.dispatchEvent(new Event(COPIED_EVENT));
   button.replaceChildren(icon('check'));
   button.classList.add('is-done');
   setTimeout(() => {

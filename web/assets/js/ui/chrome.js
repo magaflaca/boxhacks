@@ -1,19 +1,13 @@
-import { pixelText, pixelWord } from '../pixel/font.js';
-import { mascotFace } from '../pixel/mascot.js';
-import { mountScene } from '../pixel/scene.js';
 import { $ } from '../lib/dom.js';
-import { mountTheme } from './theme.js';
+import { applyCursors } from '../pixel/cursor.js';
+import { pixelText, pixelWord } from '../pixel/font.js';
+import { mascotIcon } from '../pixel/mascot.js';
+import { mountSparkles } from '../pixel/particles.js';
+import { mountScene } from '../pixel/scene.js';
+import { THEME_EVENT, mountTheme } from './theme.js';
 
 function setFavicon() {
-  const svg = mascotFace();
-  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  const computed = getComputedStyle(document.documentElement);
-  const markup = svg.outerHTML.replace(/var\((--[\w-]+)\)/g, (_, name) => computed.getPropertyValue(name).trim());
-  const link = Object.assign(document.createElement('link'), {
-    rel: 'icon',
-    href: `data:image/svg+xml,${encodeURIComponent(markup)}`,
-  });
-  document.head.append(link);
+  document.head.append(Object.assign(document.createElement('link'), { rel: 'icon', href: mascotIcon() }));
 }
 
 export function mountChrome() {
@@ -23,5 +17,8 @@ export function mountChrome() {
   }
   mountTheme($('#theme-toggle'));
   mountScene($('#sky'), $('#ground'));
+  mountSparkles();
   setFavicon();
+  applyCursors();
+  document.addEventListener(THEME_EVENT, applyCursors);
 }
