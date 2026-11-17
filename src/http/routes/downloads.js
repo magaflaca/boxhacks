@@ -18,7 +18,7 @@ export function registerDownloadRoutes(router, { library, reader, serveStatic })
     const file = library.find(params.name);
     if (!file) {
       if (acceptsHtml(req)) return serveStatic(req, res, '404.html', 404);
-      fail(404, 'not_found', 'Ese archivo no existe o ya caduco.');
+      fail(404, 'not_found', 'Ese archivo no existe o ya caducó.');
     }
 
     const etag = `"${file.storage_id}"`;

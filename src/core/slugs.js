@@ -7,9 +7,9 @@ const ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';
 
 export function assertSlug(slug) {
   if (!PATTERN.test(slug)) {
-    fail(400, 'bad_slug', 'El nombre admite de 2 a 48 letras, numeros, guiones y guiones bajos.');
+    fail(400, 'bad_slug', 'El nombre admite de 2 a 48 letras, números, guiones y guiones bajos.');
   }
-  if (RESERVED.has(slug.toLowerCase())) fail(409, 'slug_taken', 'Ese nombre esta reservado.');
+  if (RESERVED.has(slug.toLowerCase())) fail(409, 'slug_taken', 'Ese nombre está reservado.');
   return slug;
 }
 

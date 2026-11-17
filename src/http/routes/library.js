@@ -5,7 +5,7 @@ import { send, sendJson } from '../respond.js';
 
 export function registerLibraryRoutes(router, { library, config }) {
   function requireFile(slug) {
-    return library.find(slug) || fail(404, 'not_found', 'Ese archivo no existe o ya caduco.');
+    return library.find(slug) || fail(404, 'not_found', 'Ese archivo no existe o ya caducó.');
   }
 
   router.on('GET', '/api/config', ({ res }) => {
@@ -29,7 +29,7 @@ export function registerLibraryRoutes(router, { library, config }) {
 
   router.on('DELETE', '/api/files/:slug', async ({ req, res, params }) => {
     const file = requireFile(params.slug);
-    if (identify(req)?.owner !== file.owner) fail(403, 'not_owner', 'Solo quien subio el archivo puede borrarlo.');
+    if (identify(req)?.owner !== file.owner) fail(403, 'not_owner', 'Solo quien subió el archivo puede borrarlo.');
     await library.destroy(file);
     send(res, 204);
   });

@@ -42,7 +42,7 @@ export function createRouter() {
       if (route.method === wanted) return { handler: route.handler, params };
       pathExists = true;
     }
-    if (pathExists) fail(405, 'method_not_allowed', 'Metodo no permitido en esta ruta.');
+    if (pathExists) fail(405, 'method_not_allowed', 'Método no permitido en esta ruta.');
     fail(404, 'not_found', 'No existe.');
   }
 

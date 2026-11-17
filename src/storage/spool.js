@@ -17,7 +17,7 @@ function byteLimit(maxBytes, counter) {
 }
 
 function tooLarge(maxBytes) {
-  return new HttpError(413, 'too_large', `El archivo supera el limite de ${Math.round(maxBytes / 1024 ** 3)} GB.`);
+  return new HttpError(413, 'too_large', `El archivo supera el límite de ${Math.round(maxBytes / 1024 ** 3)} GB.`);
 }
 
 export function createSpool(dataDir, { maxBytes, minFreeBytes }) {
@@ -38,7 +38,7 @@ export function createSpool(dataDir, { maxBytes, minFreeBytes }) {
     const counter = { bytes: 0 };
     try {
       await pipeline(stream, byteLimit(maxBytes, counter), createWriteStream(pathOf(storageId)));
-      if (counter.bytes === 0) fail(400, 'empty_file', 'El archivo esta vacio.');
+      if (counter.bytes === 0) fail(400, 'empty_file', 'El archivo está vacío.');
     } catch (error) {
       await remove(storageId);
       throw error;

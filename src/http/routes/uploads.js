@@ -63,6 +63,7 @@ export function registerUploadRoutes(router, { intake, library, limit, secureCoo
   }
 
   router.on('POST', '/api/files', postMultipart);
+  router.on('POST', '/', postMultipart);
   router.on('PUT', '/api/files/:filename', putRaw);
   router.on('PUT', '/:filename', putRaw);
 }

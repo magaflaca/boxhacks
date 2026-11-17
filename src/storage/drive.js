@@ -12,7 +12,7 @@ const JSON_HEADERS = { 'content-type': 'application/json' };
 
 class DriveError extends Error {
   constructor(status, body) {
-    super(`Drive respondio ${status}: ${body.slice(0, 300)}`);
+    super(`Drive respondió ${status}: ${body.slice(0, 300)}`);
     this.status = status;
   }
 }
@@ -143,7 +143,7 @@ export function createDrive({ clientId, clientSecret, refreshToken, folderName }
       if (created) return created.id;
       offset += block.length;
     }
-    throw new Error('La subida a Drive termino antes de completarse');
+    throw new Error('La subida a Drive terminó antes de completarse');
   }
 
   async function download(id, from, to) {

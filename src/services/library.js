@@ -35,7 +35,7 @@ export function createLibrary({ files, spool, drive, publicUrl, log }) {
 
   async function assertAvailable(slug) {
     assertSlug(slug);
-    if (!(await release(slug))) fail(409, 'slug_taken', `El nombre "${slug}" ya esta en uso.`);
+    if (!(await release(slug))) fail(409, 'slug_taken', `El nombre "${slug}" ya está en uso.`);
   }
 
   async function register({ storageId, size, filename, slug, ttlSeconds, owner }) {
@@ -50,14 +50,14 @@ export function createLibrary({ files, spool, drive, publicUrl, log }) {
 
     if (slug) {
       await assertAvailable(slug);
-      if (!files.insert({ ...row, slug })) fail(409, 'slug_taken', `El nombre "${slug}" ya esta en uso.`);
+      if (!files.insert({ ...row, slug })) fail(409, 'slug_taken', `El nombre "${slug}" ya está en uso.`);
       return files.bySlug(slug);
     }
     for (let attempt = 0; attempt < AUTO_SLUG_ATTEMPTS; attempt++) {
       const candidate = randomSlug(6 + attempt);
       if (files.insert({ ...row, slug: candidate })) return files.bySlug(candidate);
     }
-    fail(503, 'slug_exhausted', 'No se pudo generar un nombre libre. Intentalo de nuevo.');
+    fail(503, 'slug_exhausted', 'No se pudo generar un nombre libre. Inténtalo de nuevo.');
   }
 
   function find(requested) {
