@@ -1,4 +1,6 @@
-const JSON_HEADERS = { accept: 'application/json' };
+import { chunkedUpload } from './chunked-upload.js';
+
+const JSON_HEADERS = { accept: 'application/json', 'content-type': 'application/json' };
 
 async function request(path, init = {}) {
   const response = await fetch(path, { ...init, headers: JSON_HEADERS });
@@ -12,20 +14,6 @@ export const api = {
   myFiles: async () => (await request('/api/files')).files,
   remove: (slug) => request(`/api/files/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
   checkSlug: (slug) => request(`/api/slugs/${encodeURIComponent(slug)}`),
-
-  upload(file, { slug, expires, onProgress }) {
-    const query = new URLSearchParams({ expires, ...(slug && { slug }) });
-    const xhr = new XMLHttpRequest();
-    const done = new Promise((resolve, reject) => {
-      xhr.open('PUT', `/api/files/${encodeURIComponent(file.name)}?${query}`);
-      xhr.setRequestHeader('accept', JSON_HEADERS.accept);
-      xhr.responseType = 'json';
-      xhr.upload.onprogress = (event) => onProgress(event.loaded / event.total);
-      xhr.onload = () => (xhr.status === 201 ? resolve(xhr.response) : reject(new Error(xhr.response?.message || 'La subida falló.')));
-      xhr.onerror = () => reject(new Error('Se cortó la conexión.'));
-      xhr.onabort = () => reject(new Error('Cancelado.'));
-      xhr.send(file);
-    });
-    return { done, cancel: () => xhr.abort() };
-  },
+  script: async () => (await fetch('/box.py')).text(),
+  upload: (file, options) => chunkedUpload(file, { ...options, request }),
 };
