@@ -1,0 +1,80 @@
+:root {
+  --u: 3px;
+  --font: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --page: 640px;
+
+  color-scheme: light;
+  --bg: #fdf5ea;
+  --surface: #fffcf6;
+  --surface-sunk: #f8eedf;
+  --ink: #564f6b;
+  --ink-soft: #8e86a3;
+  --line: #564f6b;
+  --line-soft: #e3d7c8;
+  --shade: #ecdfce;
+
+  --leaf: #8fd9ab;
+  --leaf-deep: #55b283;
+  --rose: #ee9db3;
+  --gold: #eec66a;
+  --violet: #b7a3e6;
+  --danger: #e2788f;
+
+  --tint-mint: #d6f2e0;
+  --tint-pink: #fbd5de;
+  --tint-butter: #fcefb9;
+  --tint-sky: #d5e9f8;
+  --tint-lilac: #e3daf7;
+  --tint-peach: #fcdfc9;
+
+  --cloud: #fffdf9;
+  --cloud-edge: #efe2d2;
+  --star: transparent;
+  --star-core: transparent;
+
+  --bug-outline: #2f7556;
+  --bug-body: #7fd49e;
+  --bug-light: #c8f3d3;
+  --bug-shade: #5cba85;
+  --bug-tip: #f3c95f;
+  --bug-eye: #3d3852;
+  --bug-glint: #ffffff;
+  --bug-cheek: #f7a8ba;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1a192b;
+  --surface: #242239;
+  --surface-sunk: #1f1d33;
+  --ink: #e8e2f7;
+  --ink-soft: #9a92bb;
+  --line: #a79dd0;
+  --line-soft: #37345a;
+  --shade: #121120;
+
+  --leaf: #7fd1a2;
+  --leaf-deep: #8fe0b0;
+  --rose: #f0a5bb;
+  --gold: #f1d483;
+  --violet: #bfaef0;
+  --danger: #f08ea4;
+
+  --tint-mint: #2b4a48;
+  --tint-pink: #55384f;
+  --tint-butter: #56502f;
+  --tint-sky: #2c4263;
+  --tint-lilac: #453c70;
+  --tint-peach: #5b4136;
+
+  --cloud: transparent;
+  --cloud-edge: transparent;
+  --star: #6f6a9c;
+  --star-core: #f6ecc0;
+
+  --bug-outline: #1f5a44;
+  --bug-body: #86dba8;
+  --bug-light: #d2f7dc;
+  --bug-shade: #5fbf8b;
+  --bug-eye: #2a2740;
+}
