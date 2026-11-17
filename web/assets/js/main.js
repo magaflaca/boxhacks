@@ -25,7 +25,12 @@ const options = mountOptions(
   { slugInput: $('#slug'), slugStatus: $('#slug-status'), expiryGroup: $('#expiry') },
   settings,
 );
-const library = mountLibrary({ section: $('#library'), list: $('#library-list') });
+const library = mountLibrary({
+  section: $('#library'),
+  list: $('#library-list'),
+  copyAll: $('#library-copy-all'),
+  more: $('#library-more'),
+});
 
 let busy = false;
 

@@ -48,11 +48,6 @@
         </form>
 
         <ul class="rows" id="queue" aria-live="polite"></ul>
-
-        <section class="section" id="library" hidden>
-          <h2 class="section-title" data-pixel="tus archivos"></h2>
-          <ul class="rows" id="library-list"></ul>
-        </section>
       </div>
 
       <aside class="layout-side">
@@ -66,6 +61,15 @@
         </section>
       </aside>
     </div>
+
+    <section class="section" id="library" hidden>
+      <div class="section-head">
+        <h2 class="section-title" data-pixel="tus archivos"></h2>
+        <button class="box text-button" id="library-copy-all" type="button" hidden></button>
+      </div>
+      <ul class="rows rows-grid" id="library-list"></ul>
+      <button class="box text-button library-more" id="library-more" type="button" hidden></button>
+    </section>
 
     <footer class="footer">Los archivos se cifran antes de guardarse y caducan solos.</footer>
   </main>
