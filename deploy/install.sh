@@ -39,6 +39,7 @@ if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
     --register-unsafely-without-email --deploy-hook "systemctl reload nginx"
 fi
 
+install -m 644 "$SOURCE/deploy/nginx-proxy.conf" /etc/nginx/snippets/boxhacks-proxy.conf
 install -m 644 "$SOURCE/deploy/nginx.conf" "$SITE"
 nginx -t
 systemctl reload nginx

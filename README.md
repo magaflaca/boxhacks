@@ -12,7 +12,10 @@ navegador / curl ──> nginx ──> servidor Node ──> disco local (spool 
                                     └── cola ──> cifrado AES-256-GCM ──> Google Drive
 ```
 
-- **Subida**: el archivo se escribe en el disco del servidor y el enlace funciona de inmediato.
+- **Subida**: el archivo se escribe en el disco del servidor y el enlace funciona de inmediato. La web
+  lo manda en partes de 16 MB, tres a la vez, a través del proxy de Cloudflare (`boxup.hacks.win`): en
+  rutas largas o con pérdidas una sola conexión directa al VPS va muy lenta, y Cloudflare recoge los
+  datos cerca del usuario. Ese host solo acepta partes; las descargas y `curl -T` van directos al VPS.
 - **Sincronización**: una cola cifra cada archivo por bloques de 1 MiB y lo sube a una carpeta propia
   de Drive con un nombre opaco. Cada archivo tiene su clave, guardada envuelta con la clave maestra.
 - **Descarga**: se sirve desde el disco local mientras quepa en la caché. Si ya fue desalojado, se lee
@@ -42,6 +45,14 @@ import requests
 url = requests.put("https://box.hacks.win/foto.png", data=open("foto.png", "rb")).text.strip()
 ```
 
+Para archivos grandes desde la terminal está el script `box.py` (solo biblioteca estándar de Python),
+que sube en partes paralelas por Cloudflare como la web:
+
+```bash
+curl -O https://box.hacks.win/box.py
+python box.py video.mp4 --expires 1d
+```
+
 La primera subida devuelve un token (cabecera `X-Box-Token`, campo `token` en JSON y cookie en el
 navegador). Enviándolo como `Authorization: Bearer <token>` las siguientes subidas quedan agrupadas:
 
@@ -54,6 +65,10 @@ navegador). Enviándolo como `Authorization: Bearer <token>` las siguientes subi
 | `GET /api/files/<nombre>` | Datos de un archivo. |
 | `DELETE /api/files/<nombre>` | Lo borra (solo su token). |
 | `GET /api/slugs/<nombre>` | Indica si un nombre está libre. |
+| `POST /api/uploads` | Abre una subida troceada. JSON `{name, size, slug?, expires?}`; responde `{id, chunk_bytes, chunks, upload_url}`. |
+| `PUT <upload_url>/api/uploads/<id>/chunks/<n>` | Envía la parte `n` (desde 0), en cualquier orden y en paralelo. |
+| `POST /api/uploads/<id>/complete` | Cierra la subida y devuelve el archivo, como un `PUT`. |
+| `DELETE /api/uploads/<id>` | Cancela una subida troceada. |
 
 Los errores llegan como texto (`error: ...`) o, con `Accept: application/json`, como
 `{"error": "codigo", "message": "..."}`.
