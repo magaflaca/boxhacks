@@ -69,8 +69,8 @@ def call(method, url, token=None, body=None, payload=None):
         except (ValueError, KeyError):
             message = f"HTTP {error.code}"
         raise BoxError(message) from None
-    except urllib.error.URLError as error:
-        raise BoxError(f"sin conexion: {error.reason}") from None
+    except OSError as error:
+        raise BoxError(f"sin conexion: {getattr(error, 'reason', error)}") from None
 
 
 class Progress:
