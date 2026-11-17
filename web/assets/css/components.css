@@ -166,7 +166,7 @@
 }
 
 .field-grow {
-  flex: 1 1 260px;
+  flex: 1 1 200px;
 }
 
 .field-label {
@@ -420,6 +420,23 @@
 
 .button:active {
   transform: translateY(var(--u));
+}
+
+@media (min-width: 1040px) {
+  .page:has(.layout) {
+    max-width: 1120px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 0 64px;
+    align-items: start;
+  }
+
+  .layout-side .section {
+    margin-top: 90px;
+  }
 }
 
 @media (max-width: 480px) {
