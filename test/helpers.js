@@ -36,6 +36,8 @@ export async function startBox({ drive, ...overrides } = {}) {
     dataDir,
     webDir: resolve(import.meta.dirname, '../web'),
     maxFileBytes: 64 * 1024 * 1024,
+    uploadUrl: 'http://up.box.test',
+    chunkBytes: 1000,
     cacheBytes: 1024 ** 3,
     minFreeBytes: 0,
     uploadsPerHour: 1000,

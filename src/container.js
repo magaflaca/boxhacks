@@ -1,6 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { createApp } from './http/app.js';
+import { createChunkedUploads } from './services/chunked.js';
 import { createIntake } from './services/intake.js';
 import { createLibrary } from './services/library.js';
 import { createReaper } from './services/reaper.js';
@@ -23,8 +24,9 @@ export function createContainer({ config, createDrive, log = console }) {
   const sync = createSync({ files, spool, drive, masterKey, log });
   const reaper = createReaper({ files, spool, drive, library, cacheBytes: config.cacheBytes, log });
   const intake = createIntake({ spool, library, sync });
+  const chunked = createChunkedUploads({ spool, intake, chunkBytes: config.chunkBytes });
   const reader = createReader({ spool, drive, masterKey });
-  const app = createApp({ config, library, intake, reader, log });
+  const app = createApp({ config, library, intake, chunked, reader, log });
 
   async function start() {
     await spool.removeOrphans(files.storageIds());
@@ -35,6 +37,7 @@ export function createContainer({ config, createDrive, log = console }) {
   function stop() {
     sync.stop();
     reaper.stop();
+    chunked.stop();
     db.close();
   }
 

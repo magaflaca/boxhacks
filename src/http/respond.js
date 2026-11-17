@@ -17,7 +17,7 @@ export function sendError(req, res, error) {
   const status = error.status || 500;
   const code = error.code || 'internal_error';
   const message = error.status ? error.message : 'Algo falló en el servidor.';
-  const headers = req.complete ? {} : { connection: 'close' };
+  const headers = { ...error.headers, ...(req.complete ? {} : { connection: 'close' }) };
   if (wantsJson(req)) sendJson(res, status, { error: code, message }, headers);
   else sendText(res, status, `error: ${message}`, headers);
 }

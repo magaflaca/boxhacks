@@ -1,8 +1,5 @@
 import busboy from 'busboy';
-import { fail } from '../../core/errors.js';
-import { identifyOrCreate, identityHeaders } from '../identity.js';
-import { clientIp } from '../rate-limit.js';
-import { sendJson, sendText, wantsJson } from '../respond.js';
+import { HttpError, fail } from '../../core/errors.js';
 
 function readMultipart(req, onFile) {
   return new Promise((resolve, reject) => {
@@ -15,26 +12,13 @@ function readMultipart(req, onFile) {
       task.catch(() => stream.resume());
       pending.push(task);
     });
-    parser.on('error', reject);
+    parser.on('error', () => reject(new HttpError(400, 'bad_form', 'El formulario llegó incompleto.')));
     parser.on('close', () => Promise.all(pending).then(resolve, reject));
     req.pipe(parser);
   });
 }
 
-export function registerUploadRoutes(router, { intake, library, limit, secureCookies }) {
-  function begin(req) {
-    limit(clientIp(req));
-    return identifyOrCreate(req);
-  }
-
-  function reply(req, res, identity, files) {
-    const headers = identityHeaders(identity, secureCookies);
-    const shown = files.map(library.present);
-    if (!wantsJson(req)) return sendText(res, 201, shown.map((file) => file.url).join('\n'), headers);
-    const body = shown.length === 1 ? shown[0] : { files: shown };
-    sendJson(res, 201, identity.isNew ? { ...body, token: identity.token } : body, headers);
-  }
-
+export function registerUploadRoutes(router, { intake, replies: { begin, reply } }) {
   async function putRaw({ req, res, url, params }) {
     const identity = begin(req);
     const slug = url.searchParams.get('slug') || undefined;

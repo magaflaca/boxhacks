@@ -2,7 +2,7 @@ import { randomInt } from 'node:crypto';
 import { fail } from './errors.js';
 
 const PATTERN = /^[a-z0-9][a-z0-9_-]{1,47}$/i;
-const RESERVED = new Set(['api', 'assets', 'favicon', 'robots', 'index', 'admin', 'static']);
+const RESERVED = new Set(['api', 'assets', 'favicon', 'robots', 'index', 'admin', 'static', 'box']);
 const ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';
 
 export function assertSlug(slug) {

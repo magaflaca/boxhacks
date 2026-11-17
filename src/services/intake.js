@@ -8,8 +8,7 @@ export function createIntake({ spool, library, sync }) {
     return ttlSeconds;
   }
 
-  async function store({ stream, filename, slug, ttlSeconds, owner }) {
-    const stored = await spool.receive(stream);
+  async function commit(stored, { filename, slug, ttlSeconds, owner }) {
     try {
       const file = await library.register({ ...stored, filename, slug, ttlSeconds, owner });
       sync.kick();
@@ -20,5 +19,9 @@ export function createIntake({ spool, library, sync }) {
     }
   }
 
-  return { prepare, store };
+  async function store({ stream, ...details }) {
+    return commit(await spool.receive(stream), details);
+  }
+
+  return { prepare, commit, store };
 }
